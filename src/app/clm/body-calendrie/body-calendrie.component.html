@@ -1,0 +1,92 @@
+
+<div style="padding:3%">
+  <mwl-demo-utils-calendar-header
+  [(view)]="view"
+  [(viewDate)]="viewDate">
+  </mwl-demo-utils-calendar-header>
+  
+  <div class="row">
+    <div class="col-md-8">
+      <div [ngSwitch]="view">
+        <mwl-calendar-month-view
+          *ngSwitchCase="'month'"
+          [viewDate]="viewDate"
+          [events]="events"
+          [cellTemplate]="customCellTemplate"
+          (beforeViewRender)="beforeMonthViewRender($event)"
+          [activeDayIsOpen]="false"
+          (dayClicked)="dayclick($event.day)"
+          [refresh]="refresh">
+        </mwl-calendar-month-view>
+      
+        <mwl-calendar-week-view
+          *ngSwitchCase="'week'"
+          [viewDate]="viewDate"
+          [events]="events">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          *ngSwitchCase="'day'"
+          [viewDate]="viewDate"
+          [events]="events">
+        </mwl-calendar-day-view>
+      </div>
+      
+    </div>
+    <div class="col-md-4">
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-default" (click)="showAddEvents()">Ajouter événement</button>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-default" (click)="showEvents()">Afficher Liste événements</button>
+        </div>
+      </div>
+      <br> <br>
+      <div class="form" *ngIf='showAddEventsBloc'>
+          <label class="checkbox-inline"><input type="checkbox" value="projet" [(ngModel)]="typeP">Projet</label>
+          <label class="checkbox-inline"><input type="checkbox" value="absence" [(ngModel)]="typeA">Absence</label>
+        <div class="form-group">
+          <label for="titre">Titre</label>
+          <input type="text" id="titre" class="form-control" [(ngModel)]="titre">
+        </div>
+        <div class="form-group">
+          <label for="ref">Réference</label>
+          <input type="text" id="ref" class="form-control" [(ngModel)]="reference">
+        </div>
+        <div class="form-group">
+          <label for="date">Event</label>
+          <input type="date" id="date" class="form-control" [(ngModel)]="event">
+        </div>
+        <input type="submit" class="btn btn-success" value="Submit" (click)="addEvent()">
+      </div>
+  
+      <div *ngIf='showEventsBloc'>
+          <p *ngIf="clickedDateResult.length==0">Pas des événements pour ce date</p>
+      <div class="events" *ngFor="let res of clickedDateResult">
+        <div class="form-group">
+          <label for="titre">Type : </label>
+          <span *ngIf="res.meta.type=='danger'">Absence</span>
+          <span *ngIf="res.meta.type=='info'">Projet</span>
+          
+        </div>
+        <div class="form-group">
+          <label for="titre">Titre : </label>
+          <span>{{res.title}}</span>
+        </div>
+        <div class="form-group">
+          <label for="ref">Réference : </label>
+          
+        </div>
+        <div class="form-group">
+          <label for="date">Event : </label>
+          <span>{{res.start}}</span>
+        </div>
+        <hr>
+      </div>
+  
+    </div>
+    </div>
+  </div>
+  </div>
+  
+  
